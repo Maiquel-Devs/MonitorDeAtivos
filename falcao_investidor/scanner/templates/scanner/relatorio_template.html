@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório Falcão</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        .header { text-align: center; border-bottom: 2px solid #4CAF50; padding-bottom: 10px; margin-bottom: 20px; }
+        h1 { color: #4CAF50; margin-bottom: 5px; }
+        .summary { font-size: 1.1em; color: #aaa; }
+        .card { background-color: #1e1e1e; border-left: 5px solid #4CAF50; margin-bottom: 30px; border-radius: 8px; overflow: hidden; }
+        .card-header { padding: 15px 20px; background-color: #2a2a2a; }
+        .card-header h2 { margin: 0; }
+        .card-header .ticker { font-size: 1.5em; font-weight: bold; }
+        .card-header .sector { font-size: 0.9em; color: #bbb; }
+        .card-content { padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+        .stats { flex: 1; min-width: 200px; }
+        .stats p { margin: 8px 0; font-size: 1.1em; }
+        .stats .label { color: #aaa; }
+        .stats .value { color: #fff; font-weight: bold; }
+        .stats .value.negative { color: #ff6b6b; }
+        .chart { flex: 2; min-width: 400px; }
+        .chart img { max-width: 100%; border-radius: 4px; }
+        .no-results { text-align: center; padding: 50px; font-size: 1.5em; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦅 Relatório do Projeto Falcão</h1>
+            <p class="summary">Análise de Quedas de {{ PERCENTUAL_QUEDA_GATILHO|floatformat:"0p" }} em {{ PERIODO_ANALISE }} | Total Analisado: {{ total_analisado }} | Oportunidades Encontradas: {{ total_encontrado }}</p>
+        </div>
+
+        {% if oportunidades %}
+            {% for op in oportunidades %}
+            <div class="card">
+                <div class="card-header">
+                    <span class="ticker">{{ op.ativo.ticker }}</span> - <span>{{ op.ativo.nome_empresa }}</span>
+                    <div class="sector">{{ op.ativo.setor.nome }}</div>
+                </div>
+                <div class="card-content">
+                    <div class="stats">
+                        <p><span class="label">Queda Detectada:</span> <span class="value negative">{{ op.queda_percentual }}</span></p>
+                        <p><span class="label">Preço Máximo:</span> <span class="value">R$ {{ op.preco_maximo }}</span> <span class="label">(em {{ op.data_maximo }})</span></p>
+                        <p><span class="label">Preço Atual:</span> <span class="value">R$ {{ op.preco_atual }}</span></p>
+                    </div>
+                    <div class="chart">
+                        <img src="data:image/png;base64,{{ op.grafico_base64 }}" alt="Gráfico de {{ op.ativo.ticker }}">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">
+                <h2>Nenhuma oportunidade encontrada com os critérios definidos.</h2>
+                <p>O mercado está estável ou em alta. 📈</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
