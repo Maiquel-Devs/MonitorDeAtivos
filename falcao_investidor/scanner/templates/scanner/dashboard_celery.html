@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório Falcão (Rápido)</title>
+    <style>
+        body { font-family: sans-serif; background-color: #121212; color: #e0e0e0; }
+        .card { background-color: #1e1e1e; border-left: 5px solid #ff6b6b; margin: 15px; padding: 15px; border-radius: 8px; }
+        h1, h2 { color: #4CAF50; text-align: center; }
+    </style>
+</head>
+<body>
+    <h1>🦅 Relatório do Projeto Falcão (com Celery)</h1>
+    <h2>Mostrando resultados da última análise. Uma nova análise foi iniciada em segundo plano.</h2>
+
+    {% if oportunidades %}
+        {% for op in oportunidades %}
+        <div class="card">
+            <h3>{{ op.ativo.ticker }} - {{ op.ativo.nome_empresa }}</h3>
+            <p><strong>Setor:</strong> {{ op.ativo.setor.nome }}</p>
+            <p style="color: #ff6b6b;"><strong>Queda Detectada:</strong> {{ op.percentual_queda|floatformat:"2" }}%</p>
+            <p><strong>Preço Máximo:</strong> R$ {{ op.preco_maximo|floatformat:"2" }}</p>
+            <p><strong>Preço Atual:</strong> R$ {{ op.preco_atual|floatformat:"2" }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <h2>Nenhuma oportunidade encontrada na última análise.</h2>
+    {% endif %}
+</body>
+</html>
